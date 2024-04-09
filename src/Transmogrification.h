@@ -63,11 +63,6 @@ enum TransmogAcoreStrings // Language.h might have same entries, appears when ex
     LANG_CMD_TRANSMOG_COMPLETE_SYNC = 11116,
 };
 
-enum TransmogSpells
-{
-    SPELL_SUMMON_ETHEREAL_WARPWEAVER = 2000100
-};
-
 class Transmogrification
 {
 public:
@@ -101,6 +96,8 @@ public:
     uint8 MaxSets;
     float SetCostModifier;
     int32 SetCopperCost;
+
+    uint32 PetSpellId;
 
     bool GetEnableSets() const;
     uint8 GetMaxSets() const;
@@ -161,7 +158,7 @@ public:
 
     bool IsAllowed(uint32 entry) const;
     bool IsNotAllowed(uint32 entry) const;
-    bool IsAllowedQuality(uint32 quality) const;
+    bool IsAllowedQuality(uint32 quality, ObjectGuid const & playerGuid) const;
     bool IsRangedWeapon(uint32 Class, uint32 SubClass) const;
     bool CanNeverTransmog(ItemTemplate const* itemTemplate);
 
@@ -184,7 +181,7 @@ public:
     bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
     bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
     bool SuitableForTransmogrification(ObjectGuid guid, ItemTemplate const* proto) const;
-    bool IsItemTransmogrifiable(ItemTemplate const* proto) const;
+    bool IsItemTransmogrifiable(ItemTemplate const* proto, ObjectGuid const &playerGuid) const;
     uint32 GetSpecialPrice(ItemTemplate const* proto) const;
 
     void DeleteFakeFromDB(ObjectGuid::LowType itemLowGuid, CharacterDatabaseTransaction* trans = nullptr);
@@ -211,6 +208,17 @@ public:
     bool EnableRetroActiveAppearances() const;
     bool EnableResetRetroActiveAppearances() const;
     [[nodiscard]] bool IsEnabled() const;
+
+    // Transmog Plus
+    bool IsTransmogPlusEnabled;
+    std::vector<uint32> MembershipIds;
+    std::vector<uint32> MembershipIdsLegendary;
+    std::vector<uint32> MembershipIdsPet;
+
+    uint32 getPlayerMembershipLevel(ObjectGuid const & playerGuid) const;
+    bool isPlusWhiteGreyEligible(ObjectGuid const & playerGuid) const;
+    bool isPlusLegendaryEligible(ObjectGuid const & playerGuid) const;
+    bool isTransmogPlusPetEligible(ObjectGuid const & playerGuid) const;
 };
 #define sTransmogrification Transmogrification::instance()
 

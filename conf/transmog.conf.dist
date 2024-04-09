@@ -257,4 +257,38 @@ Transmogrification.SetCostModifier = 3.0
 Transmogrification.SetCopperCost = 0
 
 #
+#    TRANSMOG PLUS
+#
+#    Transmogrification.EnablePlus
+#        Description: Enables/Disables TransmogPlus.
+#        Default:     0
+#
+#    Transmogrification.MembershipLevels
+#        Description: Membership levels ID from acore_cms_subscriptions.
+#        Example:     Transmogrification.MembershipLevels = "1,2,3"
+#        Default:     ""
+#
+#    Transmogrification.MembershipLevelsLegendary
+#        Description: Membership levels ID from acore_cms_subscriptions that define the eligibility for legendary items
+#        Example:     Transmogrification.MembershipLevelsLegendary = "1,2,3"
+#        Default:     ""
+#
+#    Transmogrification.MembershipLevelsPet
+#        Description: Membership levels ID from acore_cms_subscriptions that define the eligibility for transmog pet
+#        Example:     Transmogrification.MembershipLevelsPet = "1,2,3"
+#        Default:     ""
+#
+#    Transmogrification.PetSpellId
+#        Description: The ID used by the transmog pet in the spell_dbc table
+#        Example:     Transmogrification.PetSpellId = 2000100
+#        Default:     2000100
+#
+
+Transmogrification.EnablePlus = 0
+Transmogrification.MembershipLevels = ""
+Transmogrification.MembershipLevelsLegendary = ""
+Transmogrification.MembershipLevelsPet = ""
+Transmogrification.PetSpellId = 2000100
+
+#
 ###################################################################################################

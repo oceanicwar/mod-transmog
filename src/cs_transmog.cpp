@@ -43,7 +43,7 @@ public:
             { "add",      addCollectionTable                                        },
             { "",         HandleDisableTransMogVisual,   SEC_PLAYER,    Console::No },
             { "sync",     HandleSyncTransMogCommand,     SEC_PLAYER,    Console::No },
-            { "portable", HandleTransmogPortableCommand, SEC_MODERATOR, Console::No },
+            { "portable", HandleTransmogPortableCommand, SEC_PLAYER,    Console::No },
         };
 
         static ChatCommandTable commandTable =
@@ -144,10 +144,12 @@ public:
         std::string itemQuality = tempStream.str();
         std::string itemName = itemTemplate->Name1;
 
-        // get locale item name
-        int loc_idex = target->GetSession()->GetSessionDbLocaleIndex();
-        if (ItemLocale const* il = sObjectMgr->GetItemLocale(itemId))
-            ObjectMgr::GetLocaleString(il->Name, loc_idex, itemName);
+        if (target) {
+            // get locale item name
+            int loc_idex = target->GetSession()->GetSessionDbLocaleIndex();
+            if (ItemLocale const* il = sObjectMgr->GetItemLocale(itemId))
+                ObjectMgr::GetLocaleString(il->Name, loc_idex, itemName);
+        }
 
         std::string playerName = player->GetName();
         std::string nameLink = handler->playerLink(playerName);
@@ -304,8 +306,21 @@ public:
 
         if (Player* player = PlayerIdentifier::FromSelf(handler)->GetConnectedPlayer())
         {
-            player->CastSpell((Unit*)nullptr, SPELL_SUMMON_ETHEREAL_WARPWEAVER, true);
+
+            if (sTransmogrification->IsTransmogPlusEnabled) {
+                if (sTransmogrification->isTransmogPlusPetEligible(player->GetGUID())) {
+                    player->CastSpell((Unit*)nullptr, sTransmogrification->PetSpellId, true);
+                    return true;
+                }
+            }
+
+            if (player->GetSession()->GetSecurity() < SEC_MODERATOR) {
+                return true;
+            }
+
+            player->CastSpell((Unit*)nullptr, sTransmogrification->PetSpellId, true);
         }
+
         return true;
     };
 };
